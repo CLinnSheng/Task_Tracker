@@ -1,6 +1,8 @@
 #pragma once
 
+#include "task.h"
 #include <string_view>
+#include <vector>
 class CLI
 {
   public:
@@ -25,4 +27,6 @@ class CLI
     void listTaskByStatus(const std::string_view &);
 
   private:
+    // list of task
+    std::vector<Task> tasks;
 };
