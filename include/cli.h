@@ -1,8 +1,6 @@
 #pragma once
-
 #include "task.h"
-#include <string_view>
-#include <vector>
+
 class CLI
 {
   public:
@@ -29,4 +27,5 @@ class CLI
   private:
     // list of task
     std::vector<Task> tasks;
+    std::string jsonFilePath{"tasks.json"};
 };

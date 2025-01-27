@@ -1,7 +1,4 @@
 #include "../include/cli.h"
-#include <iostream>
-#include <string>
-#include <vector>
 
 struct CommandLine
 {
