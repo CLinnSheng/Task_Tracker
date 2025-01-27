@@ -9,7 +9,7 @@ OBJ_DIR = obj
 EXECUTABLE = cli
 
 # SRC .cpp file
-SRCS = $(wildcard $SRC_DIR/*.cpp)
+SRCS = $(wildcard $(SRC_DIR)/*.cpp)
 
 # Object files
 OBJS = $(SRCS:$(SRC_DIR)/%.cpp=$(OBJ_DIR)/%.o)
@@ -25,7 +25,7 @@ $(EXECUTABLE): $(OBJS)
 	$(CXX) $(OBJS) -o $@
 
 $(OBJ_DIR)/%.o : $(SRC_DIR)/%.cpp
-	$(CXX) $(CXXFLAGS) -c $< $@
+	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 clean:
 	@rm -rf $(OBJ_DIR)
@@ -33,3 +33,4 @@ clean:
 
 rebuild: clean all
 
+.PHONY: all directories clean rebuild

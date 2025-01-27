@@ -4,6 +4,8 @@
 class CLI
 {
   public:
+    CLI();
+    ~CLI();
     // add task
     void addTask(const std::string_view &);
 

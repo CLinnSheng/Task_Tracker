@@ -31,10 +31,11 @@ Status stringToStatus(const std::string &status)
     throw std::invalid_argument("Invalid Status String");
 }
 
-bool JSONFileHandler::writeTasksToFile(const std::string &filepath, const std::vector<Task> &tasks)
+void JSONFileHandler::writeTasksToFile(const std::string &filepath, const std::vector<Task> &tasks)
 {
     nlohmann::json jsonData = nlohmann::json::array();
 
+    // Convert tasks to JSON
     for (const auto &task : tasks)
     {
         nlohmann::json taskJson;
@@ -47,23 +48,32 @@ bool JSONFileHandler::writeTasksToFile(const std::string &filepath, const std::v
         jsonData.push_back(taskJson);
     }
 
-    std::ofstream outputfile(directory + filepath, std::ios::trunc);
-    if (!outputfile.is_open())
+    // Create the full path including the directory
+    std::string fullPath = directory + filepath;
+
+    // Create the directory structure if it doesn't exist
+    std::filesystem::path dirPath = std::filesystem::path(fullPath).parent_path();
+    if (!dirPath.empty() && !std::filesystem::exists(dirPath))
     {
-        std::cerr << "Error: Could not open or create file " << filepath << std::endl;
-        return false;
+        std::filesystem::create_directories(dirPath);
     }
 
+    // Open the file for writing (creates the file if it doesn't exist)
+    std::ofstream outputfile(fullPath, std::ios::trunc);
+    if (!outputfile.is_open())
+    {
+        std::cerr << "Error: Could not open or create file " << fullPath << std::endl;
+    }
+
+    // Write JSON to the file
     try
     {
-        outputfile << jsonData.dump(4);
+        outputfile << jsonData.dump(4); // Write JSON data (even if empty)
     }
-    catch (const std::exception e)
+    catch (const std::exception &e)
     {
-        std::cerr << "Error: Failed to create Json - " << e.what() << std::endl;
-        return false;
+        std::cerr << "Error: Failed to write JSON to file - " << e.what() << std::endl;
     }
-    return true;
 }
 
 std::vector<Task> JSONFileHandler::readTasksFromFile(const std::string &filepath)
@@ -72,7 +82,6 @@ std::vector<Task> JSONFileHandler::readTasksFromFile(const std::string &filepath
 
     if (!inputFile.is_open())
     {
-        std::cerr << "Error: Could not open file " << filepath << std::endl;
         return {};
     }
 

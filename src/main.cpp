@@ -38,7 +38,6 @@ int main(int argc, char *argv[])
     }
     else if (commandInput.command == "delete")
     {
-
         TaskManager.deleteTask(std::stoi(commandInput.args[0]));
     }
     else if (commandInput.command == "mark-in-progress")
